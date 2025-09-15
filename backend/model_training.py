@@ -5,11 +5,18 @@ from sklearn.metrics import accuracy_score
 import joblib
 import os
 
-# Create models directory if not exists
+# Ensure models directory exists
 os.makedirs("models", exist_ok=True)
 
+# Path to CSV (relative to project root)
+csv_path = "data/Crop_recommendation.csv"
+
+# Check for file existence
+if not os.path.isfile(csv_path):
+    raise FileNotFoundError(f"❌ Dataset not found at {csv_path}")
+
 # Load dataset
-data = pd.read_csv("data/crop_recommendation.csv")
+data = pd.read_csv(csv_path)
 
 # Split features and target
 X = data.drop("label", axis=1)
@@ -30,5 +37,6 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f"✅ Model trained with accuracy: {accuracy:.2f}")
 
 # Save trained model
-joblib.dump(model, "models/crop_model.pkl")
-print("💾 Model saved at models/crop_model.pkl")
+model_path = "models/crop_model.pkl"
+joblib.dump(model, model_path)
+print(f"💾 Model saved at {model_path}")
